@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    command: >
+      postgres -c wal_level=logical
+               -c max_replication_slots=10
+               -c max_wal_senders=10
+
+  realtime:
+    image: supabase/realtime
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_PORT: 5432
+      PORT: 4000
+      APP_NAME: "realtime"
+      JWT_SECRET: super-secret-jwt
+      REPLICATION_MODE: RLS
+      DB_AFTER_CONNECT_QUERY: "SET session_replication_role = 'replica';"
+      SECRET_KEY_BASE: a9f860232db81a9b33aba1e41d4e2cf363a059ae86be53ca512699eb860a444f
+      RLIMIT_NOFILE: 1048576
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
