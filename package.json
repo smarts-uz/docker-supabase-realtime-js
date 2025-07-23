@@ -11,6 +11,8 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
-    "@supabase/realtime-js": "^2.12.2"
+    "@supabase/realtime-js": "^2.12.2",
+    "@supabase/supabase-js": "^2.52.0",
+    "ws": "^8.18.3"
   }
 }
